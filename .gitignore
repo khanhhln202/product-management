@@ -1,0 +1,12 @@
+# The .gitignore file is used in Git to specify which files or directories should be ignored by Git when committing changes to a repository. 
+# This helps ensure that unnecessary, sensitive, or large files do not get added to your version control system.
+
+# dependencies
+/node_modules
+
+# testing
+
+# production
+
+# misc 
+.env 

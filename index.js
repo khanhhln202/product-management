@@ -1,10 +1,13 @@
 // Using Node.js `require()`
 const express = require('express');
 
+// Configure env 
+require("dotenv").config();
+
 const route = require("./routes/client/index.route")
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 // Express supports templating engines like Pug, EJS, and Handlebars, enabling dynamic content rendering.
 app.set('views', './views');
