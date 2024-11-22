@@ -13,7 +13,10 @@ const port = process.env.PORT;
 app.set('views', './views');
 app.set('view engine', 'pug');
 
-// Route
+// Serving Static Files (Express allows serving static assets (HTML, CSS, images) easily.)
+app.use(express.static('public'));
+
+// Routes
 route(app);
 
 app.listen(port, () => {
