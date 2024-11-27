@@ -1,4 +1,19 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
 
 block main 
-    h1 Products Page 
+    .container.my-3 
+        .row 
+            .col-12
+                +box-head("Product Page")
+
+        .row 
+            .col-4.mb-3 
+                .product-item 
+                    .inner-image 
+                        img(src="/images/WhiteHoodie.jpg", alt="White Hoodie")
+                    .inner-content 
+                        h3.inner-title White Hoodie 
+                        .inner-price-new 10$
+                        .inner-price-old 18$
+                        .inner-discount -20%
