@@ -8,12 +8,13 @@ block main
                 +box-head("Product Page")
 
         .row 
-            .col-4.mb-3 
-                .product-item 
-                    .inner-image 
-                        img(src="/images/WhiteHoodie.jpg", alt="White Hoodie")
-                    .inner-content 
-                        h3.inner-title White Hoodie 
-                        .inner-price-new 10$
-                        .inner-price-old 18$
-                        .inner-discount -20%
+            each item in dummyProducts
+                .col-4.mb-3 
+                    .product-item 
+                        .inner-image 
+                            img(src=item.thumbnail, alt=item.title)
+                        .inner-content 
+                            h3.inner-title #{item.title}
+                            .inner-price-new #{item.priceNew}$
+                            .inner-price-old #{item.price}$
+                            .inner-discount #{item.discountPercentage}%
