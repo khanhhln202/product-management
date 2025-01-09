@@ -1,6 +1,17 @@
+const Product = require("../../models/product.model")
+const DummyProduct = require("../../models/dummy-products");
+
+
 // [GET] /admin/products
-module.exports.index = (req, res) => {
+module.exports.index = async (req, res) => {
+    const dummyProducts = await DummyProduct.find({
+        delete: false
+    });
+
+    console.log(dummyProducts);
+
     res.render("admin/pages/products/index", {
-        pagetTitle: "Products list"
+        pageTitle: "Products list",
+        dummyProducts: dummyProducts
     });
 }
