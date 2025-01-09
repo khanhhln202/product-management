@@ -4,7 +4,9 @@ const express = require('express');
 // Configure env 
 require("dotenv").config();
 
-const database = require("./config/database")
+const database = require("./config/database");
+
+const systemConfig = require("./config/system");
 
 const routeAdmin = require("./routes/admin/index.route");
 const route = require("./routes/client/index.route");
@@ -17,6 +19,9 @@ const port = process.env.PORT;
 // Express supports templating engines like Pug, EJS, and Handlebars, enabling dynamic content rendering.
 app.set('views', './views');
 app.set('view engine', 'pug');
+
+// App Local Variables
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // Serving Static Files (Express allows serving static assets (HTML, CSS, images) easily.)
 app.use(express.static('public'));
