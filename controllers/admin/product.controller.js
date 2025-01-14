@@ -39,6 +39,16 @@ module.exports.index = async (req, res) => {
         find.status = req.query.status;
     }
 
+    let keyword = "";
+    if(req.query.keyword){
+        keyword = req.query.keyword;
+
+        // Regex
+        const regex = new RegExp(keyword, "i");
+
+        find.title = regex;
+    }
+
     const dummyProducts = await DummyProduct.find(find);
 
     // console.log(dummyProducts);
@@ -46,6 +56,7 @@ module.exports.index = async (req, res) => {
     res.render("admin/pages/products/index", {
         pageTitle: "Products list",
         dummyProducts: dummyProducts,
-        filterStatus: filterStatus
+        filterStatus: filterStatus,
+        keyword: keyword
     });
 }
