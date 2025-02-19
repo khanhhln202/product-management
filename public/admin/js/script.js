@@ -38,7 +38,7 @@ if (formSearch) {
     e.preventDefault(); // Prevent default form submission for testing
     const keyword = e.target.elements.keyword.value;
 
-    if (keyword){
+    if (keyword) {
       url.searchParams.set("keyword", keyword);
     } else {
       url.searchParams.delete("keyword");
@@ -48,4 +48,4 @@ if (formSearch) {
   });
 }
 
-// End form Search 
+// End form Search

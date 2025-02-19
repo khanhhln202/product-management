@@ -2,38 +2,38 @@ const Product = require("../../models/product.model");
 const DummyProduct = require("../../models/dummy-products");
 
 const filterStatusHelper = require("../../helpers/filterStatus");
+const searchHelper = require("../../helpers/search");
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
-    // Filter
-    const filterStatus = filterStatusHelper(req.query);
+  // Filter
+  const filterStatus = filterStatusHelper(req.query);
 
-    let find = {
-        delete: false
-    }
+  // Find object
+  let find = {
+    delete: false,
+  };
 
-    if(req.query.status){
-        find.status = req.query.status;
-    }
+  // Status
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
 
-    let keyword = "";
-    if(req.query.keyword){
-        keyword = req.query.keyword;
+  // Search
+  const objectSearch = searchHelper(req.query);
 
-        // Regex
-        const regex = new RegExp(keyword, "i");
+  if (objectSearch.regex) {
+    find.title = objectSearch.regex;
+  }
 
-        find.title = regex;
-    }
+  const dummyProducts = await DummyProduct.find(find);
 
-    const dummyProducts = await DummyProduct.find(find);
+  // console.log(dummyProducts);
 
-    // console.log(dummyProducts);
-
-    res.render("admin/pages/products/index", {
-        pageTitle: "Products list",
-        dummyProducts: dummyProducts,
-        filterStatus: filterStatus,
-        keyword: keyword
-    });
-}
+  res.render("admin/pages/products/index", {
+    pageTitle: "Products list",
+    dummyProducts: dummyProducts,
+    filterStatus: filterStatus,
+    keyword: objectSearch.keyword,
+  });
+};
