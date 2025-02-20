@@ -26,14 +26,30 @@ module.exports.index = async (req, res) => {
     find.title = objectSearch.regex;
   }
 
-  const dummyProducts = await DummyProduct.find(find);
+  // Pagination
+  let objPagination = {
+    currentPage: 1,
+    limitItems: 4
+  };
 
-  // console.log(dummyProducts);
+  if (req.query.page) {
+    objPagination.currentPage = parseInt(req.query.page);
+  }
+
+  objPagination.skip = (objPagination.currentPage - 1) * objPagination.limitItems;
+
+  const countProducts = await DummyProduct.countDocuments(find);
+  objPagination.totalItems = countProducts;
+  objPagination.totalPages = Math.ceil(countProducts / objPagination.limitItems);
+  // End of pagination
+
+  const dummyProducts = await DummyProduct.find(find).limit(objPagination.limitItems).skip(objPagination.skip);
 
   res.render("admin/pages/products/index", {
     pageTitle: "Products list",
     dummyProducts: dummyProducts,
     filterStatus: filterStatus,
     keyword: objectSearch.keyword,
+    pagination: objPagination 
   });
 };
