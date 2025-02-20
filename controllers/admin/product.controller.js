@@ -3,6 +3,7 @@ const DummyProduct = require("../../models/dummy-products");
 
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
+const paginationHelper = require("../../helpers/pagination");
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
@@ -27,29 +28,28 @@ module.exports.index = async (req, res) => {
   }
 
   // Pagination
-  let objPagination = {
-    currentPage: 1,
-    limitItems: 4
-  };
-
-  if (req.query.page) {
-    objPagination.currentPage = parseInt(req.query.page);
-  }
-
-  objPagination.skip = (objPagination.currentPage - 1) * objPagination.limitItems;
-
   const countProducts = await DummyProduct.countDocuments(find);
-  objPagination.totalItems = countProducts;
-  objPagination.totalPages = Math.ceil(countProducts / objPagination.limitItems);
+
+  let objPagination = paginationHelper(
+    {
+    currentPage: 1,
+    limitItems: 4,
+    },
+    req.query,
+    countProducts
+);
+
   // End of pagination
 
-  const dummyProducts = await DummyProduct.find(find).limit(objPagination.limitItems).skip(objPagination.skip);
+  const dummyProducts = await DummyProduct.find(find)
+    .limit(objPagination.limitItems)
+    .skip(objPagination.skip);
 
   res.render("admin/pages/products/index", {
     pageTitle: "Products list",
     dummyProducts: dummyProducts,
     filterStatus: filterStatus,
     keyword: objectSearch.keyword,
-    pagination: objPagination 
+    pagination: objPagination,
   });
 };
