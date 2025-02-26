@@ -1,6 +1,9 @@
 // Using Node.js `require()`
 const express = require('express');
 
+// Method Override
+const methodOverride = require('method-override');
+
 // Configure env 
 require("dotenv").config();
 
@@ -15,6 +18,10 @@ database.connect();
 
 const app = express();
 const port = process.env.PORT;
+
+// Middleware
+app.use(methodOverride('_method'));
+
 
 // Express supports templating engines like Pug, EJS, and Handlebars, enabling dynamic content rendering.
 app.set('views', './views');

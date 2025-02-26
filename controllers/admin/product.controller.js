@@ -32,12 +32,12 @@ module.exports.index = async (req, res) => {
 
   let objPagination = paginationHelper(
     {
-    currentPage: 1,
-    limitItems: 4,
+      currentPage: 1,
+      limitItems: 4,
     },
     req.query,
     countProducts
-);
+  );
 
   // End of pagination
 
@@ -52,4 +52,14 @@ module.exports.index = async (req, res) => {
     keyword: objectSearch.keyword,
     pagination: objPagination,
   });
+};
+
+// [GET] /admin/products/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+  const id = req.params.id;
+  const status = req.params.status;
+
+  await DummyProduct.updateOne({ _id: id }, { status: status });
+
+  res.redirect("back");
 };
