@@ -9,5 +9,6 @@ router.patch("/change-status/:status/:id", controller.changeStatus); // :status 
 
 router.patch("/change-multi", controller.changeMulti); // :status and :id are dynamic params
 
+router.delete("/delete/:id", controller.deleteItem);
 
 module.exports =  router;
