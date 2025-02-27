@@ -7,4 +7,7 @@ router.get("/", controller.index);
 
 router.patch("/change-status/:status/:id", controller.changeStatus); // :status and :id are dynamic params
 
+router.patch("/change-multi", controller.changeMulti); // :status and :id are dynamic params
+
+
 module.exports =  router;

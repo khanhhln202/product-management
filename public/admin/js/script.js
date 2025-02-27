@@ -68,3 +68,80 @@ if(buttonsPagination){
   });
 }
 // End of Pagination
+
+// Checkbox Multi
+  const checkboxMulti = document.querySelector("[checkbox-multi]");
+  if(checkboxMulti){
+    const inputCheckAll = checkboxMulti.querySelector("input[name='checkall']");
+    const inputsId = checkboxMulti.querySelectorAll("input[name='id']");
+
+    inputCheckAll.addEventListener("click", () => {
+      if(inputCheckAll.checked){
+        inputsId.forEach(input => {
+          input.checked = true;
+        });
+      }
+      else{
+        inputsId.forEach(input => {
+          input.checked = false;
+        });
+      }
+    });
+
+    inputsId.forEach(input => {
+      input.addEventListener("click", () => {
+
+        // const countChecked = checkboxMulti.querySelectorAll("input[name='id']:checked").length;
+        // if(countChecked === inputsId.length){
+        //   inputCheckAll.checked = true;
+        // }
+        // else{
+        //   inputCheckAll.checked = false;
+        // }
+      
+        let checkAll = true;
+        inputsId.forEach(input => {
+          if(!input.checked){
+            checkAll = false;
+          }
+        });
+
+        if(checkAll){
+          inputCheckAll.checked = true;
+        }
+        else{
+          inputCheckAll.checked = false;
+        }
+      });
+    });
+  }
+// End of Checkbox Multi
+
+// Form Change Status Multi
+  const formChangeStatusMulti = document.querySelector("[form-change-multi]");
+  if(formChangeStatusMulti){
+    formChangeStatusMulti.addEventListener("submit", (e) => {
+      e.preventDefault(); // Prevent default form submission for testing
+      
+      const checkboxMulti = document.querySelector("[checkbox-multi]");
+      const inputsChecked = checkboxMulti.querySelectorAll("input[name='id']:checked");
+
+      if(inputsChecked.length > 0){
+        let ids = [];
+        const inputIds = formChangeStatusMulti.querySelector("input[name='ids']");
+        inputsChecked.forEach(input => {
+          ids.push(input.value);
+        });
+
+        inputIds.value = ids.join(","); // Convert array to string
+
+        formChangeStatusMulti.submit();
+      }
+      else{
+        alert("Please select at least one item");
+      }
+    });
+  }
+
+// End of Form Change Status Multi
+

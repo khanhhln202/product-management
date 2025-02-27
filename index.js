@@ -1,8 +1,11 @@
 // Using Node.js `require()`
 const express = require('express');
 
-// Method Override
+// Method Override (Express doesn't support PUT, PATCH, DELETE in HTML forms. To solve this, we can use the method-override package.)
 const methodOverride = require('method-override');
+
+// Body Parser (Express doesn't support parsing the request body by default. To solve this, we can use the body-parser package.)
+const bodyParser = require('body-parser');
 
 // Configure env 
 require("dotenv").config();
@@ -22,6 +25,10 @@ const port = process.env.PORT;
 // Middleware
 app.use(methodOverride('_method'));
 
+// Parse application/json
+app.use(bodyParser.json()); 
+// Parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Express supports templating engines like Pug, EJS, and Handlebars, enabling dynamic content rendering.
 app.set('views', './views');
