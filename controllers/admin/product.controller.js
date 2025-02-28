@@ -82,6 +82,12 @@ module.exports.changeMulti = async (req, res) => {
         { status: "inactive" }
       );
       break;
+    case "delete-all":
+      await DummyProduct.updateMany(
+        { _id: { $in: ids } },
+        { delete: true, deletedAt: new Date() }
+      );
+      break;
     default:
       break;
   }
@@ -93,7 +99,9 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
 
-  await DummyProduct.deleteOne({ _id: id });
+  // await DummyProduct.deleteOne({ _id: id }); // Hard delete
+  await DummyProduct.updateOne({ _id: id }, { delete: true, deletedAt: new Date()}); // Soft delete
+
 
   res.redirect("back");
 };

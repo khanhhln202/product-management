@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
   status: String,
   position: Number,
   delete: Boolean,
+  deletedAt: Date
 });
 
 // Create a model for the schema, linking it to the "dummy-products" collection in MongoDB
