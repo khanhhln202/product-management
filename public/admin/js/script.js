@@ -157,3 +157,20 @@ if (formChangeStatusMulti) {
 }
 
 // End of Form Change Status Multi
+
+// Show alert message
+const showAlert = document.querySelector("[show-alert]");
+const closeAlert = document.querySelector("[close-alert]");
+if (showAlert) {
+  const time = parseInt(showAlert.getAttribute("data-time"));
+  console.log(time);
+  setTimeout(() => {
+    // showAlert.style.display = "none";
+    showAlert.classList.add("alert-hidden");
+  }, time);
+
+  closeAlert.addEventListener("click", () => {
+    showAlert.style.display = "none";
+  });
+}
+// End of show alert message
