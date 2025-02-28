@@ -77,27 +77,34 @@ module.exports.changeMulti = async (req, res) => {
         { _id: { $in: ids } },
         { status: "active" }
       );
-      req.flash("success", `Change status of ${ids.length} items successfully!`);
+      req.flash(
+        "success",
+        `Change status of ${ids.length} items successfully!`
+      );
       break;
     case "inactive":
       await DummyProduct.updateMany(
         { _id: { $in: ids } },
         { status: "inactive" }
       );
-      req.flash("success", `Change status of ${ids.length} items successfully!`);
+      req.flash(
+        "success",
+        `Change status of ${ids.length} items successfully!`
+      );
       break;
     case "delete-all":
       await DummyProduct.updateMany(
         { _id: { $in: ids } },
         { delete: true, deletedAt: new Date() }
       );
+      req.flash("success", `Delete ${ids.length} items successfully!`);
       break;
     case "change-position":
-      for(const item of ids){
+      for (const item of ids) {
         let [id, position] = item.split("-");
         position = parseInt(position);
         await DummyProduct.updateOne({ _id: id }, { position: position });
-      }   
+      }
       break;
     default:
       break;
@@ -115,6 +122,8 @@ module.exports.deleteItem = async (req, res) => {
     { _id: id },
     { delete: true, deletedAt: new Date() }
   ); // Soft delete
+
+  req.flash("success", "Delete item successfully!");
 
   res.redirect("back");
 };
