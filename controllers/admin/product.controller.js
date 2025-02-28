@@ -105,6 +105,7 @@ module.exports.changeMulti = async (req, res) => {
         position = parseInt(position);
         await DummyProduct.updateOne({ _id: id }, { position: position });
       }
+      req.flash("success", `Change position of ${ids.length} items successfully!`);
       break;
     default:
       break;
