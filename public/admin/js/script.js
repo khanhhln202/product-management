@@ -52,14 +52,13 @@ if (formSearch) {
 
 // Pagination
 const buttonsPagination = document.querySelectorAll("[button-pagination]");
-if(buttonsPagination){
+if (buttonsPagination) {
   let url = new URL(window.location.href);
 
-  buttonsPagination.forEach(button => {
+  buttonsPagination.forEach((button) => {
     button.addEventListener("click", () => {
       const page = button.getAttribute("button-pagination");
-      console.log(page);
-      if(page){
+      if (page) {
         url.searchParams.set("page", page);
       }
 
@@ -70,88 +69,91 @@ if(buttonsPagination){
 // End of Pagination
 
 // Checkbox Multi
-  const checkboxMulti = document.querySelector("[checkbox-multi]");
-  if(checkboxMulti){
-    const inputCheckAll = checkboxMulti.querySelector("input[name='checkall']");
-    const inputsId = checkboxMulti.querySelectorAll("input[name='id']");
+const checkboxMulti = document.querySelector("[checkbox-multi]");
+if (checkboxMulti) {
+  const inputCheckAll = checkboxMulti.querySelector("input[name='checkall']");
+  const inputsId = checkboxMulti.querySelectorAll("input[name='id']");
 
-    inputCheckAll.addEventListener("click", () => {
-      if(inputCheckAll.checked){
-        inputsId.forEach(input => {
-          input.checked = true;
-        });
-      }
-      else{
-        inputsId.forEach(input => {
-          input.checked = false;
-        });
-      }
-    });
+  inputCheckAll.addEventListener("click", () => {
+    if (inputCheckAll.checked) {
+      inputsId.forEach((input) => {
+        input.checked = true;
+      });
+    } else {
+      inputsId.forEach((input) => {
+        input.checked = false;
+      });
+    }
+  });
 
-    inputsId.forEach(input => {
-      input.addEventListener("click", () => {
+  inputsId.forEach((input) => {
+    input.addEventListener("click", () => {
+      // const countChecked = checkboxMulti.querySelectorAll("input[name='id']:checked").length;
+      // if(countChecked === inputsId.length){
+      //   inputCheckAll.checked = true;
+      // }
+      // else{
+      //   inputCheckAll.checked = false;
+      // }
 
-        // const countChecked = checkboxMulti.querySelectorAll("input[name='id']:checked").length;
-        // if(countChecked === inputsId.length){
-        //   inputCheckAll.checked = true;
-        // }
-        // else{
-        //   inputCheckAll.checked = false;
-        // }
-      
-        let checkAll = true;
-        inputsId.forEach(input => {
-          if(!input.checked){
-            checkAll = false;
-          }
-        });
-
-        if(checkAll){
-          inputCheckAll.checked = true;
-        }
-        else{
-          inputCheckAll.checked = false;
+      let checkAll = true;
+      inputsId.forEach((input) => {
+        if (!input.checked) {
+          checkAll = false;
         }
       });
+
+      if (checkAll) {
+        inputCheckAll.checked = true;
+      } else {
+        inputCheckAll.checked = false;
+      }
     });
-  }
+  });
+}
 // End of Checkbox Multi
 
 // Form Change Status Multi
-  const formChangeStatusMulti = document.querySelector("[form-change-multi]");
-  if(formChangeStatusMulti){
-    formChangeStatusMulti.addEventListener("submit", (e) => {
-      e.preventDefault(); // Prevent default form submission for testing
-      
-      const checkboxMulti = document.querySelector("[checkbox-multi]");
-      const inputsChecked = checkboxMulti.querySelectorAll("input[name='id']:checked");
+const formChangeStatusMulti = document.querySelector("[form-change-multi]");
+if (formChangeStatusMulti) {
+  formChangeStatusMulti.addEventListener("submit", (e) => {
+    e.preventDefault(); // Prevent default form submission for testing
 
-      const typeChange = e.target.elements.type.value;
-      
-      if(typeChange =="delete-all"){
-        const isConfirm = confirm("Are you sure to delete these items?");
-        if(!isConfirm){
-          return;
+    const checkboxMulti = document.querySelector("[checkbox-multi]");
+    const inputsChecked = checkboxMulti.querySelectorAll(
+      "input[name='id']:checked"
+    );
+
+    const typeChange = e.target.elements.type.value;
+
+    if (typeChange == "delete-all") {
+      const isConfirm = confirm("Are you sure to delete these items?");
+      if (!isConfirm) {
+        return;
+      }
+    }
+
+    if (inputsChecked.length > 0) {
+      let ids = [];
+      const inputIds = formChangeStatusMulti.querySelector("input[name='ids']");
+      inputsChecked.forEach((input) => {
+        if (typeChange == "change-position") {
+          const position = input
+            .closest("tr") // Find the closest parent element with the "tr" tag
+            .querySelector("input[name='position']").value;
+          ids.push(`${input.value}-${position}`); // Combine id and position (id-position)
+        } else {
+          ids.push(input.value); // Get id only
         }
-      }
-      
+      });
 
-      if(inputsChecked.length > 0){
-        let ids = [];
-        const inputIds = formChangeStatusMulti.querySelector("input[name='ids']");
-        inputsChecked.forEach(input => {
-          ids.push(input.value);
-        });
+      inputIds.value = ids.join(","); // Convert array to string
 
-        inputIds.value = ids.join(","); // Convert array to string
-
-        formChangeStatusMulti.submit();
-      }
-      else{
-        alert("Please select at least one item");
-      }
-    });
-  }
+      formChangeStatusMulti.submit();
+    } else {
+      alert("Please select at least one item");
+    }
+  });
+}
 
 // End of Form Change Status Multi
-

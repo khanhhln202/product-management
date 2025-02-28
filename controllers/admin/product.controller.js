@@ -38,10 +38,10 @@ module.exports.index = async (req, res) => {
     req.query,
     countProducts
   );
-
   // End of pagination
 
   const dummyProducts = await DummyProduct.find(find)
+    .sort({ position: "desc" })
     .limit(objPagination.limitItems)
     .skip(objPagination.skip);
 
@@ -88,20 +88,29 @@ module.exports.changeMulti = async (req, res) => {
         { delete: true, deletedAt: new Date() }
       );
       break;
+    case "change-position":
+      for(const item of ids){
+        let [id, position] = item.split("-");
+        position = parseInt(position);
+        await DummyProduct.updateOne({ _id: id }, { position: position });
+      }   
+      break;
     default:
       break;
   }
 
   res.redirect("back");
 };
-  
+
 // [DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
 
   // await DummyProduct.deleteOne({ _id: id }); // Hard delete
-  await DummyProduct.updateOne({ _id: id }, { delete: true, deletedAt: new Date()}); // Soft delete
-
+  await DummyProduct.updateOne(
+    { _id: id },
+    { delete: true, deletedAt: new Date() }
+  ); // Soft delete
 
   res.redirect("back");
 };
