@@ -11,4 +11,9 @@ router.patch("/change-multi", controller.changeMulti); // :status and :id are dy
 
 router.delete("/delete/:id", controller.deleteItem);
 
+router.get("/create", controller.create); // use get method to render create form
+
+router.post("/create", controller.create_post); // use post method to handle create form submission
+
+
 module.exports =  router;

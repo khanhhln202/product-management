@@ -1,5 +1,7 @@
 // Import mongoose library to define schema and interact with MongoDB
 const mongoose = require("mongoose");
+const slug = require('mongoose-slug-updater');
+mongoose.plugin(slug); // Apply slug plugin to mongoose
 
 // Define the schema for products, describing the structure of each document
 const productSchema = new mongoose.Schema({
@@ -11,9 +13,17 @@ const productSchema = new mongoose.Schema({
   thumbnail: String,
   status: String,
   position: Number,
-  delete: Boolean,
+  slug: { type: String, slug: "title", slug_padding_size: 1, unique: true },
+  delete: {
+    type: Boolean, 
+    default: false // Default value for the field if not provided
+  },
   deletedAt: Date
+},
+{
+  timestamps: true // Automatically add createdAt and updatedAt fields
 });
+
 
 // Create a model for the schema, linking it to the "dummy-products" collection in MongoDB
 // `mongoose.model(name, schema, collection)` connects the model to the specific collection
