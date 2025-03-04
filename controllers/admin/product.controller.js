@@ -145,6 +145,7 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.create_post = async (req, res) => {
+  // Convert properties to integers to ensure correct data types
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -154,6 +155,13 @@ module.exports.create_post = async (req, res) => {
   } else {
     req.body.position = parseInt(req.body.position);
   } 
+
+  // Set the path to the uploaded file
+  // `thumbnail` is a custom property added to `req.body`
+  // This is necessary to include the path to the uploaded file as part of the product data
+  req.body.thumbnail = `/uploads/${req.file.filename}`; 
+
+  // Create a new instance of the DummyProduct model with the data from req.body
   const newProduct = new DummyProduct(req.body);
   await newProduct.save();
 

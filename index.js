@@ -1,6 +1,7 @@
 // Initiate the Express application and configure it to use the necessary middleware and routes.
 const express = require("express");
 
+
 // Method Override (Express doesn't support PUT, PATCH, DELETE in HTML forms. To solve this, we can use the method-override package.)
 const methodOverride = require("method-override");
 
