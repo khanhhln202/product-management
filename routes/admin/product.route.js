@@ -24,5 +24,10 @@ router.post("/create", upload.single("thumbnail"), validate.create_post, control
 // validate.create_post is a middleware that validates the form data. If the form data is invalid, the user will be redirected back to the form.
 // controller.create_post is a middleware that processes the form data. If the form data is valid, the user will be redirected to the product list page.
 
+router.get("/edit/:id", controller.edit); // use get method to render edit form
+// use patch method to handle edit form submission
+router.patch("/edit/:id", upload.single("thumbnail"), validate.create_post, controller.edit_patch); 
+
+
 
 module.exports =  router;

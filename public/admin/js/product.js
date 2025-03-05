@@ -44,3 +44,26 @@ if (buttonsChangeStatus) {
   }
 // End of delete item
 
+// Edit item
+const buttonsEdit = document.querySelectorAll("[button-edit]");
+if(buttonsEdit.length > 0){
+  const formEditItem = document.querySelector("#form-edit-item");
+  const path = formEditItem.getAttribute("data-path");
+
+  buttonsEdit.forEach(button => {
+    button.addEventListener("click", () => {
+      const isConfirm = confirm("Are you sure to edit this item?");
+      if(isConfirm){
+        const id = button.getAttribute("data-id");
+        const action = `${path}/${id}?_method=PUT`;
+
+        formDeleteItem.action = action;
+        formDeleteItem.submit();
+      }
+
+      
+    });
+  });
+}
+// End of edit item
+

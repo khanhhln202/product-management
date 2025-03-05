@@ -7,6 +7,7 @@ include ../../mixins/alert.pug
 
 block main 
     +alert-success(5000)
+    +alert-error(5000)
 
     h1 Products list 
 
@@ -89,8 +90,19 @@ block main
                                             class="badge badge-danger"
                                         ) Inactive
                                 td 
-                                    button(
+                                    a(
+                                        href=`${prefixAdmin}/products/edit/${item.id}`
                                         class="btn btn-warning btn-sm"
+                                        button-edit
+                                        data-id=item.id
+                                        data-title=item.title
+                                        data-price=item.price
+                                        data-position=item.position
+                                        data-status=item.status
+                                        data-thumbnail=item.thumbnail
+                                        data-description=item.description
+                                        data-stock=item.stock
+                                        data-discount=item.discount
                                         ) Edit 
                                     button(
                                         class="btn btn-danger btn-sm ml-1"

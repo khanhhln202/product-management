@@ -139,29 +139,26 @@ module.exports.deleteItem = async (req, res) => {
 module.exports.create = async (req, res) => {
   res.render("admin/pages/products/create", {
     pageTitle: "Create new product",
-    
   });
 };
 
 // [POST] /admin/products/create
 module.exports.create_post = async (req, res) => {
-  
-
   // Convert properties to integers to ensure correct data types
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
-  if(req.body.position == ""){
+  if (req.body.position == "") {
     const countProducts = await DummyProduct.countDocuments();
     req.body.position = countProducts + 1;
   } else {
     req.body.position = parseInt(req.body.position);
-  } 
+  }
 
   // Set the path to the uploaded file
   // `thumbnail` is a custom property added to `req.body`
   // This is necessary to include the path to the uploaded file as part of the product data
-  if(req.file){ 
+  if (req.file) {
     req.body.thumbnail = `/uploads/${req.file.filename}`;
   }
 
@@ -171,5 +168,50 @@ module.exports.create_post = async (req, res) => {
 
   req.flash("success", "Create new product successfully!");
   res.redirect(`${systemConfig.prefixAdmin}/products/create`);
-  
+};
+
+// [GET] /admin/products/edit/:id
+module.exports.edit = async (req, res) => {
+  try {
+    const findProduct = {
+      _id: req.params.id,
+      delete: false,
+    };
+
+    const dummyProduct = await DummyProduct.findOne(findProduct);
+
+    res.render("admin/pages/products/edit", {
+      pageTitle: "Edit the product",
+      dummyProduct: dummyProduct,
+    });
+  } catch (error) {
+    req.flash("error", "Product not found!");
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  }
+};
+
+// [PATCH] /admin/products/edit/:id
+// The data that was sent is in the request body, so we can access it using req.body
+module.exports.edit_patch = async (req, res) => {
+  // Convert properties to integers to ensure correct data types
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+  req.body.position = parseInt(req.body.position);
+
+  // Set the path to the uploaded file
+  if (req.file) {
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }
+
+  try {
+    // Update the product data
+    await DummyProduct.updateOne({ _id: req.params.id }, req.body);
+
+    req.flash("success", "Update product successfully!");
+    res.redirect(`${systemConfig.prefixAdmin}/products/edit/${req.params.id}`);
+  } catch (error) {
+    req.flash("error", "There are some error when updating!");
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  }
 };
