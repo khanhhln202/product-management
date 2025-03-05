@@ -3,22 +3,22 @@ const express = require("express");
 
 
 // Method Override (Express doesn't support PUT, PATCH, DELETE in HTML forms. To solve this, we can use the method-override package.)
-const methodOverride = require("method-override");
+const methodOverride = require("method-override"); // method-override is a middleware that allows us to use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
 
 // Body Parser (Express doesn't support parsing the request body by default. To solve this, we can use the body-parser package.)
-const bodyParser = require("body-parser");
+const bodyParser = require("body-parser"); // body-parser is a middleware that parses the request body and makes it available under req.body.
 
 // Cookie Parser (Express doesn't support parsing cookies by default. To solve this, we can use the cookie-parser package.)
-const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser'); // cookie-parser is a middleware that parses cookies attached to the client request object.
 
 // Express Session (Express doesn't support sessions by default. To solve this, we can use the express-session package.)
-const session = require('express-session');
+const session = require('express-session'); // express-session is a middleware that creates a session object in the request object.
 
 // Express Flash (Express doesn't support flash messages by default. To solve this, we can use the express-flash package.)
-const flash = require("express-flash");
+const flash = require("express-flash"); // flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user.
 
 // Configure env (dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.)
-require("dotenv").config();
+require("dotenv").config(); // dotenv is a module that loads environment variables from a .env file into process.env.
 
 const database = require("./config/database");
 

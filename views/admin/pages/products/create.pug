@@ -3,6 +3,7 @@ include ../../mixins/alert.pug
 
 block main
     +alert-success(5000)
+    +alert-error(5000)
 
     h1(class="mb-4") Create New Product
 
@@ -66,7 +67,10 @@ block main
                 min="0"
             )
 
-        div(class="form-group")
+        div(
+            class="form-group"
+            upload-image
+        )
             label(for="thumbnail") Thumbnail
             input(
                 type="file"
@@ -74,7 +78,20 @@ block main
                 id="thumbnail"
                 name="thumbnail"
                 accept="image/*"
+                upload-image-input
             )
+            div(class="image-container")
+                img(
+                    src=""
+                    upload-image-preview
+                    class="image-preview"
+                )
+                button(
+                    type="button"
+                    class="close-btn"
+                    upload-image-hide
+                ) ✕
+            
 
         div(class="form-group")
             label(for="position") Position

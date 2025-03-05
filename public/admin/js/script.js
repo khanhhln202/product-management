@@ -174,3 +174,28 @@ if (showAlert) {
   });
 }
 // End of show alert message
+
+// Upload Image Preview
+const uploadImage = document.querySelector("[upload-image]");
+if(uploadImage){
+  const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
+  const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
+  const uploadImageHide = uploadImage.querySelector("[upload-image-hide]");
+  const imageContainer = uploadImagePreview.closest(".image-container");
+
+  uploadImageInput.addEventListener("change", (e) => { // Listen for the change event on the input element
+    const file = e.target.files[0]; // Get the first file from the list of selected files
+    if(file){
+      // Create a URL for the file. This URL can be used to set the src attribute of an image element to display the image.
+      uploadImagePreview.src = URL.createObjectURL(file); // URL.createObjectURL() creates a DOMString containing a URL representing the object given in the parameter.
+      imageContainer.classList.add("show-close-btn"); 
+    }
+  });
+
+  uploadImageHide.addEventListener("click", () => {
+    uploadImagePreview.src = "";
+    imageContainer.classList.remove("show-close-btn");
+  });
+}
+
+// End of Upload Image Preview
