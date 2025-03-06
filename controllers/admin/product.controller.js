@@ -215,3 +215,22 @@ module.exports.edit_patch = async (req, res) => {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   }
 };
+
+// [GET] /admin/products/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const findProduct = {
+      _id: req.params.id,
+      delete: false,
+    };
+
+    const dummyProduct = await DummyProduct.findOne(findProduct);
+
+    res.render("admin/pages/products/detail", {
+      pageTitle: dummyProduct.title,
+      dummyProduct: dummyProduct,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  }
+};

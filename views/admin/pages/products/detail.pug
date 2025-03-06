@@ -1,0 +1,55 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main  
+    if (dummyProduct.title)
+        h1(class="mb-4") #{dummyProduct.title}
+
+    if (dummyProduct.price)
+        div(class="mb-4") Price: <b>#{dummyProduct.price}$</b>
+
+    if (dummyProduct.discountPercentage)
+        div(class="mb-4") Discount: <b>#{dummyProduct.discountPercentage}%</b>
+
+    if (dummyProduct.stock)
+        div(class="mb-4") Stock: <b>#{dummyProduct.stock}</b>
+
+    if (dummyProduct.thumbnail)
+        div(class="mb-4") 
+            img(
+                src=dummyProduct.thumbnail
+                alt=dummyProduct.title
+                style="width: 100px;"
+            )
+
+    if (dummyProduct.status)
+        div(class="mb-4") 
+            span Status: 
+            if(dummyProduct.status === "active")
+                span(class="badge badge-success") Active
+            else
+                span(class="badge badge-danger") Inactive
+
+    if (dummyProduct.position)
+        div(class="mb-4") Position: <b>#{dummyProduct.position}</b>
+
+    if (dummyProduct.description)
+        div(class="mb-4") #{dummyProduct.description}
+
+    a(class="btn btn-outline-primary btn-sm ml-1" href=`${prefixAdmin}/products/edit/${dummyProduct._id}`) Edit
+
+    button(
+        class="btn btn-outline-danger btn-sm ml-1"  
+        button-delete
+        data-id=dummyProduct._id
+    ) Delete
+
+    form(
+        action=""
+        method="POST" 
+        id="form-delete-item"
+        data-path-detail=`${prefixAdmin}/products/delete`
+    ) 
+
+    script(src="/admin/js/item-detail.js") 
+

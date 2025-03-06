@@ -28,6 +28,7 @@ router.get("/edit/:id", controller.edit); // use get method to render edit form
 // use patch method to handle edit form submission
 router.patch("/edit/:id", upload.single("thumbnail"), validate.create_post, controller.edit_patch); 
 
+router.get("/detail/:id", controller.detail); // use get method to render detail page
 
 
 module.exports =  router;

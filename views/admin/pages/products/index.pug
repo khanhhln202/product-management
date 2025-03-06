@@ -91,18 +91,12 @@ block main
                                         ) Inactive
                                 td 
                                     a(
+                                        href=`${prefixAdmin}/products/detail/${item.id}`
+                                        class="btn btn-info btn-sm"                                      
+                                        ) Detail
+                                    a(
                                         href=`${prefixAdmin}/products/edit/${item.id}`
-                                        class="btn btn-warning btn-sm"
-                                        button-edit
-                                        data-id=item.id
-                                        data-title=item.title
-                                        data-price=item.price
-                                        data-position=item.position
-                                        data-status=item.status
-                                        data-thumbnail=item.thumbnail
-                                        data-description=item.description
-                                        data-stock=item.stock
-                                        data-discount=item.discount
+                                        class="btn btn-warning btn-sm ml-1"                                      
                                         ) Edit 
                                     button(
                                         class="btn btn-danger btn-sm ml-1"
