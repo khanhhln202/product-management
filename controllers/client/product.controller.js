@@ -19,12 +19,32 @@ module.exports.index = async (req, res) => {
         return item;
     })
 
-    console.log(newProduct);
-
     res.render("client/pages/products/index", {
         pageTitle: "Products page",
         products: products,
         dummyProducts: newProduct
     });
+
+}
+
+// [GET] /products/:slug
+
+module.exports.detail = async (req, res) => {
+    try {
+        const findProduct = {
+          delete: false,
+          status: "active",
+          slug: req.params.slug, // req.params.slug get from router.get('/:slug', controller.detail);
+        };
+    
+        const dummyProduct = await DummyProduct.findOne(findProduct); 
+    
+        res.render("client/pages/products/detail", {
+          pageTitle: dummyProduct.title,
+          dummyProduct: dummyProduct,
+        });
+      } catch (error) {
+        res.redirect(`/products`);
+      }
 
 }
