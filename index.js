@@ -41,8 +41,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Express supports templating engines like Pug, EJS, and Handlebars, enabling dynamic content rendering.
-app.set("views", "./views");
-app.set("view engine", "pug");
+// app.set("views", "./views");
+app.set("views", `${__dirname}/views`); // This is the views directory. __dirname is the path to the current directory.
+app.set("view engine", "pug"); // This is the view engine. pug is a templating engine.
 
 // Flash
 // Use the cookie parser middleware
@@ -57,7 +58,7 @@ app.use(flash());
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // Serving Static Files (Express allows serving static assets (HTML, CSS, images) easily.)
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`)); // This is the static files middleware. It serves static files from the public directory. __dirname is the path to the current directory.
 
 // Routes (Express allows defining routes to handle different HTTP methods and URLs.)
 routeAdmin(app);
