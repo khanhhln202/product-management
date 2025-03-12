@@ -23,6 +23,29 @@ block main
                     +search(keyword)
 
     .card.mb-3 
+        .card-header Arrange
+        .card-body 
+            row 
+                .col-4 
+                    div(sort)
+                        select(
+                            class="form-control"
+                            name="sort"
+                            sort-select
+                        )
+                            option(value="position-desc") Descending position
+                            option(value="position-asc") Ascending position
+                            option(value="price-desc") Descending price
+                            option(value="price-asc") Ascending price
+                            option(value="title-asc") Title A - Z 
+                            option(value="title-desc") Title Z - A
+
+                        button(
+                            class="btn btn-danger mt-2"
+                            sort-claer
+                        ) Clear
+
+    .card.mb-3 
         .card-header Products List
             .card-body
                 .row
@@ -34,9 +57,8 @@ block main
                             class="btn btn-outline-success"
                         ) + Create new product
 
-
                 table(
-                    class="table table-bordered table-striped"
+                    class="table table-hover table-sm"
                     checkbox-multi
                 )
                     thead 

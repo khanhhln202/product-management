@@ -155,14 +155,12 @@ module.exports.create_post = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  // Upload file from folder public/uploads
   // Set the path to the uploaded file
   // `thumbnail` is a custom property added to `req.body`
   // This is necessary to include the path to the uploaded file as part of the product data
-  
-  // if (req.file) {
-  //   req.body.thumbnail = `/uploads/${req.file.filename}`;
-  // }
+  if (req.file) {
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }
 
   // Create a new instance of the DummyProduct model with the data from req.body
   const newProduct = new DummyProduct(req.body);
@@ -208,7 +206,7 @@ module.exports.edit_patch = async (req, res) => {
 
   try {
     // Update the product data
-    await DummyProduct.updateOne({ _id: req.params.id }, req.body);
+    await DummyProduct.updateOne({ _id: req.params.id }, req.body); 
 
     req.flash("success", "Update product successfully!");
     res.redirect(`${systemConfig.prefixAdmin}/products/edit/${req.params.id}`);
