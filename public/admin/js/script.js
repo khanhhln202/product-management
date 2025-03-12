@@ -203,7 +203,7 @@ if(uploadImage){
 // Sort
   const sort = document.querySelector("[sort");
   if(sort){
-    let url = new URL(window.location.href);
+    let url = new URL(window.location.href); // Create a URL object using the current page URL
 
     const sortSelect = sort.querySelector("[sort-select]");
     const sortClear = sort.querySelector("[sort-clear]");
@@ -212,10 +212,10 @@ if(uploadImage){
       const value = e.target.value;
       const [sortKey, sortValue] = value.split("-");
 
-      url.searchParams.set("sortKey", sortKey);
+      url.searchParams.set("sortKey", sortKey); 
       url.searchParams.set("sortValue", sortValue);
 
-      window.location.href = url.href; // redirect back
+      window.location.href = url.href; // window.location.href is a property that returns the URL of the current page.
     });
 
     // Clear sort
@@ -223,7 +223,7 @@ if(uploadImage){
       url.searchParams.delete("sortKey");
       url.searchParams.delete("sortValue");
 
-      window.location.href = url.href; // redirect back
+      window.location.href = url.href; // window.location.href is a property that returns the URL of the current page.
     })
 
     // Add selected to options

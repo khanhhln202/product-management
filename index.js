@@ -1,6 +1,7 @@
 // Initiate the Express application and configure it to use the necessary middleware and routes.
 const express = require("express");
 
+const path = require("path"); // The path module provides utilities for working with file and directory paths.
 
 // Method Override (Express doesn't support PUT, PATCH, DELETE in HTML forms. To solve this, we can use the method-override package.)
 const methodOverride = require("method-override"); // method-override is a middleware that allows us to use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
@@ -52,6 +53,10 @@ app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }})) // This i
 // Use the flash middleware
 app.use(flash());
 // End of Flash
+
+// TinyMCE
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce'))); // This line serves the TinyMCE files from the node_modules directory.
+// End of TinyMCE 
 
 // App Local Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;

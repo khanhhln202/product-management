@@ -34,7 +34,7 @@ block main
         div(class="mb-4") Position: <b>#{dummyProduct.position}</b>
 
     if (dummyProduct.description)
-        div(class="mb-4") #{dummyProduct.description}
+        div(class="mb-4") !{dummyProduct.description}
 
     a(class="btn btn-outline-primary btn-sm ml-1" href=`${prefixAdmin}/products/edit/${dummyProduct._id}`) Edit
 
