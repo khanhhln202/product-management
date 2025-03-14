@@ -1,11 +1,12 @@
 extends ../../layouts/default.pug
+include ../../mixins/table-tree.pug
 
 block main 
 
     h1 Products catalog
 
     .card.mb-3 
-        .card-header Products List
+        .card-header Products Catagories List
             .card-body
                 .row
                     .col-8
@@ -31,53 +32,5 @@ block main
                             th Action 
 
                     tbody 
-                        each item, index in productCategories
-                            tr 
-                                td 
-                                    input(
-                                        type="checkbox"
-                                        name="id"
-                                        value=item.id
-                                    )
-                                td #{index+1}
-                                td 
-                                    img(
-                                        src=item.thumbnail
-                                        alt=item.title
-                                        width="100px"
-                                        height="auto"
-                                    )
-                                td #{item.title}
-                                td 
-                                    input(type="number" name="position" value=item.position style="width: 60px" min="1") 
-                                td 
-                                    if(item.status == "active")
-                                        a(
-                                            href="javascript:;"
-                                            data-id=item.id
-                                            data-status=item.status 
-                                            button-change-status
-                                            class="badge badge-success"
-                                        ) Active 
-                                    else 
-                                        a(
-                                            href="javascript:;" 
-                                            data-id=item.id
-                                            data-status=item.status
-                                            button-change-status
-                                            class="badge badge-danger"
-                                        ) Inactive
-                                td 
-                                    a(
-                                        href=`${prefixAdmin}/product-categories/detail/${item.id}`
-                                        class="btn btn-info btn-sm"                                      
-                                        ) Detail
-                                    a(
-                                        href=`${prefixAdmin}/product-categories/edit/${item.id}`
-                                        class="btn btn-warning btn-sm ml-1"                                      
-                                        ) Edit 
-                                    button(
-                                        class="btn btn-danger btn-sm ml-1"
-                                        button-delete
-                                        data-id=item.id
-                                        ) Delete 
+                        +table-tree(productCategories)
+                        
