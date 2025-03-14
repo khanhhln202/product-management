@@ -43,8 +43,18 @@ module.exports.index = async (req, res) => {
   );
   // End of pagination
 
+  // Sort 
+  let sort = {};
+
+  if(req.query.sortKey && req.query.sortValue){
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort = { position: "desc" };
+  } 
+  // End of sort
+
   const dummyProducts = await DummyProduct.find(find)
-    .sort({ position: "desc" })
+    .sort(sort)
     .limit(objPagination.limitItems)
     .skip(objPagination.skip);
 
@@ -158,9 +168,9 @@ module.exports.create_post = async (req, res) => {
   // Set the path to the uploaded file
   // `thumbnail` is a custom property added to `req.body`
   // This is necessary to include the path to the uploaded file as part of the product data
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }
+  // if (req.file) {
+  //   req.body.thumbnail = `/uploads/${req.file.filename}`;
+  // }
 
   // Create a new instance of the DummyProduct model with the data from req.body
   const newProduct = new DummyProduct(req.body);
@@ -200,9 +210,9 @@ module.exports.edit_patch = async (req, res) => {
   req.body.position = parseInt(req.body.position);
 
   // Set the path to the uploaded file
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }
+  // if (req.file) {
+  //   req.body.thumbnail = `/uploads/${req.file.filename}`;
+  // }
 
   try {
     // Update the product data

@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require('multer'); // multer is a middleware for handling multipart/form-data, which is primarily used for uploading files.
-
+const cloudinary = require('cloudinary').v2; // cloudinary is a cloud service that offers cloud storage for images and videos.
+const streamifier = require('streamifier'); // streamifier is a module that converts a buffer to a readable stream.
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ const router = express.Router();
 
 // const storageMulter = require("../../helpers/storageMulter"); // require storageMulter.js
 // const upload = multer({ storage: storageMulter()}); // multer({dest: './public/uploads/'})
-const upload = multer();
+const upload = multer(); // upload is a middleware that processes multipart/form-data.
 
 const controller = require("../../controllers/admin/product.controller");
 const validate = require("../../validates/admin/product.validates"); // require product.validate.js

@@ -201,7 +201,7 @@ if(uploadImage){
 // End of Upload Image Preview
 
 // Sort
-  const sort = document.querySelector("[sort");
+  const sort = document.querySelector("[sort]");
   if(sort){
     let url = new URL(window.location.href); // Create a URL object using the current page URL
 

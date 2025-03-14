@@ -42,7 +42,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Express supports templating engines like Pug, EJS, and Handlebars, enabling dynamic content rendering.
-app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
 
 // Flash
@@ -62,7 +62,7 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // Serving Static Files (Express allows serving static assets (HTML, CSS, images) easily.)
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 // Routes (Express allows defining routes to handle different HTTP methods and URLs.)
 routeAdmin(app);
