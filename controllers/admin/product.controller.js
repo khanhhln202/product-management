@@ -55,8 +55,8 @@ module.exports.index = async (req, res) => {
 
   const dummyProducts = await DummyProduct.find(find)
     .sort(sort)
-    .limit(objPagination.limitItems)
-    .skip(objPagination.skip);
+    .limit(objPagination.limitItems) 
+    .skip(objPagination.skip); // Skip the first n items and return the rest of the items from the collection
 
   res.render("admin/pages/products/index", {
     pageTitle: "Products list",
