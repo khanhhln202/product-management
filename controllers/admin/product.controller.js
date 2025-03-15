@@ -201,10 +201,15 @@ module.exports.edit = async (req, res) => {
     };
 
     const dummyProduct = await DummyProduct.findOne(findProduct);
+  
+    const productCategories = await ProductCategory.find({ deleted: false });
+  
+    const newProductCategories = createTreeHelper.tree(productCategories);
 
     res.render("admin/pages/products/edit", {
       pageTitle: "Edit the product",
       dummyProduct: dummyProduct,
+      categories: newProductCategories,
     });
   } catch (error) {
     req.flash("error", "Product not found!");
