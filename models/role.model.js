@@ -9,7 +9,7 @@ const roleSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
-  delete: {
+  deleted: {
     type: Boolean, 
     default: false // Default value for the field if not provided
   },
