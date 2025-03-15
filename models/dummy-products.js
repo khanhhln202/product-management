@@ -6,6 +6,7 @@ mongoose.plugin(slug); // Apply slug plugin to mongoose
 // Define the schema for products, describing the structure of each document
 const productSchema = new mongoose.Schema({
   title: String,
+  product_category_id: {type: String, default: ""},
   description: String,
   price: Number,
   discountPercentage: Number,

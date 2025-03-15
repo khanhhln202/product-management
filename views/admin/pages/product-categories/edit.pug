@@ -2,40 +2,42 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
-block main
+block main 
     +alert-success(5000)
     +alert-error(5000)
 
-    h1(class="mb-4") Create New Product
+    h1(class="mb-4") Edit The Product Category
 
     form(
-        action=`${prefixAdmin}/products/create`
-        id="form-create-product"
+        action=`${prefixAdmin}/product-categories/edit/${productCategory.id}?_method=PATCH`
+        id="form-create-product-category"
         method="POST"
         enctype="multipart/form-data" 
     )
 
         div(class="form-group")
-            label(for="title") Title
+            label(for="title") Title 
             input(
                 type="text"
                 class="form-control"
                 id="title"
                 name="title"
                 required
+                value=productCategory.title
             )
 
         div(class="form-group")
-            label(for="product_category_id") Category
+            label(for="parent_id") Parent Category
             select(
                 name="parent_id"
                 id="parent_id"
                 class="form-control"
             )
-                option(value="") -- Category --
-                    if (categories)
-                        +select-tree(categories)
-
+                option(value="") -- Root Category --
+                    if (productCategories)
+                        +select-tree(productCategories, 1, productCategory.parent_id)
+                        
+            
         div(class="form-group")
             label(for="desc") Description
             textarea(
@@ -43,41 +45,8 @@ block main
                 id="desc"
                 name="description"
                 rows="5"
-            )
-
-        div(class="form-group")
-            label(for="price") Price
-            input(
-                type="number"
-                class="form-control"
-                id="price"
-                name="price"
-                required
-                value="0"
-                min="0"
-            )
-
-        div(class="form-group")
-            label(for="discount") $ Discount
-            input(
-                type="number"
-                class="form-control"
-                id="discount"
-                name="discountPercentage"
-                value="0"
-                min="0"
-            )
-
-        div(class="form-group")
-            label(for="stock") Stock
-            input(
-                type="number"
-                class="form-control"
-                id="stock"
-                name="stock"
-                value="0"
-                min="0"
-            )
+                textarea-mce
+            ) #{productCategory.description}
 
         div(
             class="form-group"
@@ -92,18 +61,12 @@ block main
                 accept="image/*"
                 upload-image-input
             )
-            div(class="image-container")
-                img(
-                    src=""
-                    upload-image-preview
-                    class="image-preview"
-                )
-                button(
-                    type="button"
-                    class="close-btn"
-                    upload-image-hide
-                ) ✕
-            
+            img(
+                src=productCategory.thumbnail
+                class="image-preview mt-2"
+                upload-image-preview
+            )
+
         div(class="form-group")
             label(for="position") Position
             input(
@@ -111,9 +74,11 @@ block main
                 class="form-control"
                 id="position"
                 name="position"
-                placeholder="Auto increase"
+                placeholder="Auto"
                 min="1"
+                value=productCategory.position
             )
+        
         div(class="form-group form-check form-check-inline")
             input(
                 type="radio"
@@ -121,24 +86,24 @@ block main
                 id="statusActive"
                 name="status"
                 value="active"
-                checked
+                checked=(productCategory.status == "active" ? true : false)
             )
             label(for="statusActive" class="form-check-label") Active
-        
+
         div(class="form-group form-check form-check-inline")
             input(
                 type="radio"
                 class="form-check-input"
-                id="statusInactive"
+                id="statusActive"
                 name="status"
                 value="inactive"
+                checked=(productCategory.status == "inactive" ? true : false)
             )
-            label(for="statusInactive" class="form-check-label") Inactive
+            label(for="statusActive" class="form-check-label") Inactive
 
         div(class="form-group")
             button(
                 type="submit"
                 class="btn btn-primary"
-            ) Create
+            ) Apply
 
-    script(src="/admin/js/product.js")
