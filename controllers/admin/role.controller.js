@@ -35,3 +35,35 @@ module.exports.create_post = async (req, res) => {
     req.flash("success", "Create new role successfully!");
     res.redirect(`${systemConfig.prefixAdmin}/roles/create`);
 };
+
+// [GET] /admin/roles/edit/:id
+module.exports.edit = async (req, res) => {
+    try {
+        const findRole = {
+            _id: req.params.id,
+            deleted: false,
+        };
+
+    const role = await Role.findOne(findRole);
+
+    res.render("admin/pages/roles/edit", {
+        pageTitle: "Edit Permissions",
+        role: role,
+    });
+    } catch (error) {
+        req.flash("error", "Role not found!");
+        res.redirect(`${systemConfig.prefixAdmin}/roles`);
+    }
+}
+
+// [PATCH] /admin/roles/edit/:id
+module.exports.edit_patch = async (req, res) => {
+    try {
+        await Role.updateOne({ _id: req.params.id }, req.body); // Update the role data.
+        req.flash("success", "Update role successfully!");
+        res.redirect("back");
+    } catch (error) {
+        req.flash("error", "There are some error when updating!");
+        res.redirect(`${systemConfig.prefixAdmin}/roles`);
+    }
+}
