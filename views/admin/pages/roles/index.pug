@@ -24,7 +24,7 @@ block main
                 thead
                     tr
                         th NO
-                        th Permissions
+                        th Roles
                         th Description
                         th Actions
                 tbody
@@ -51,3 +51,12 @@ block main
                     else
                         tr 
                             td(colspan="4" class="text-center") No data. No permission groups have been created yet.
+
+    form(   
+        action=""
+        method="POST" 
+        id="form-delete-item"
+        data-path=`${prefixAdmin}/roles/delete`
+    ) 
+
+    script(src="/admin/js/roles.js") 

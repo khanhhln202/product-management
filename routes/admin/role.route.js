@@ -13,4 +13,11 @@ router.get("/edit/:id", controller.edit);
 
 router.patch("/edit/:id", controller.edit_patch);
 
+router.get("/permissions", controller.permissions);
+
+router.patch("/permissions", controller.permissions_patch);
+
+router.delete("/delete/:id", controller.deleteRole);
+
+
 module.exports = router;
