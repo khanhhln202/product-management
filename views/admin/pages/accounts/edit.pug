@@ -5,11 +5,11 @@ block main
     +alert-success(5000)
     +alert-error(5000)
 
-    h1(class="mb-4") Create New Account
+    h1(class="mb-4") Edit Account
 
     if(roles)
         form(
-            action=`${prefixAdmin}/accounts/create`
+            action=`${prefixAdmin}/accounts/edit/${account.id}?_method=PATCH`
             method="POST"
             enctype="multipart/form-data" 
         )
@@ -21,6 +21,7 @@ block main
                     id="fullName"
                     name="fullName"
                     required
+                    value=account.fullName
                 )
 
             div(class="form-group")
@@ -31,26 +32,25 @@ block main
                     id="email"
                     name="email"
                     required
+                    value=account.email
                 )
 
             div(class="form-group")
-                label(for="password") Password *
+                label(for="password") Password 
                 input(
                     type="password"
                     class="form-control"
                     id="password"
                     name="password"
-                    required
                 )
 
             div(class="form-group")
-                label(for="passwordConfirm") Confirm Password *
+                label(for="passwordConfirm") Confirm Password 
                 input(
                     type="password"
                     class="form-control"
                     id="passwordConfirm"
                     name="passwordConfirm"
-                    required
                 )
 
             div(class="form-group")
@@ -60,6 +60,7 @@ block main
                     class="form-control"
                     id="phone"
                     name="phone"
+                    value=account.phone
                 )
 
             div(
@@ -75,7 +76,7 @@ block main
                     accept="image/*"
                     upload-image-input
                 )
-                img(src="" class="image-preview" upload-image-preview, alt="Avatar")
+                img(src=account.avatar class="image-preview" upload-image-preview, alt="Avatar")
 
             div(class="form-group")
                 label(for="role_id") Role
@@ -88,6 +89,7 @@ block main
                     each role in roles
                         option(
                             value=role.id
+                            selected= (role.id == account.role_id ? true : false)
                         ) #{role.title}
                         
 
@@ -98,7 +100,7 @@ block main
                     id="statusActive"
                     name="status"
                     value="active"
-                    checked
+                    checked=(account.status === "active" ? true : false)
                 )
                 label(for="statusActive" class="form-check-label") Active
 
@@ -109,6 +111,7 @@ block main
                     id="statusInactive"
                     name="status"
                     value="inactive"
+                    checked=(account.status === "inactive" ? true : false)
                 )
                 label(for="statusInactive" class="form-check-label") Inactive
             
@@ -117,7 +120,7 @@ block main
                 button(
                     type="submit"
                     class="btn btn-primary"
-                ) Create
+                ) Update
 
     else    
         p Please create roles first to create an account

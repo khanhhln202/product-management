@@ -45,14 +45,6 @@ module.exports.create_post = async (req, res) => {
   if (emailExist) {
     req.flash("error", `Email ${req.body.email} already exists!`);
     res.redirect("back");
-  } else if (req.body.password !== req.body.passwordConfirm) {
-    req.flash("error", "Password and confirm password do not match!");
-    res.redirect("back");
-    return;
-  } else if (req.body.password.length < 6) {
-    req.flash("error", "Password must be at least 6 characters!");
-    res.redirect("back");
-    return;
   } else {
     req.body.password = md5(req.body.password); // Hash password
 
@@ -64,4 +56,62 @@ module.exports.create_post = async (req, res) => {
 
     res.redirect(`${systemConfig.prefixAdmin}/accounts`);
   }
+};
+
+// [GET] /admin/accounts/edit/:id
+module.exports.edit = async (req, res) => {
+  let find = {
+    _id: req.params.id,
+    deleted: false,
+  };
+
+  try {
+    const account = await Account.findOne(find);
+
+    const roles = await Role.find({ deleted: false });
+
+    res.render("admin/pages/accounts/edit", {
+      pageTitle: "Edit account",
+      account: account,
+      roles: roles,
+    });
+  } catch (error) {
+    req.flash("error", "Account not found!");
+    res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+  }
+};
+
+// [PATCH] /admin/accounts/edit/:id
+module.exports.edit_patch = async (req, res) => {
+  const emailExist = await Account.findOne({
+    _id: { $ne: req.params.id }, // Exclude the current account ($ne: not equal)
+    email: req.body.email,
+    deleted: false,
+  })
+
+  if (emailExist) {
+    req.flash("error", `Email ${req.body.email} already exists!`);
+    res.redirect("back");
+  } else {
+    if(req.body.password) {
+      req.body.password = md5(req.body.password);
+    } else {
+      delete req.body.password;
+    }
+  
+    try {
+      await Account.updateOne(
+        { _id: req.params.id },
+        req.body 
+      )
+  
+      req.flash("success", "Update account successfully!");
+      res.redirect("back");
+  
+    } catch (error) {
+      req.flash("error", "Update account failed!");
+      res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+    }
+  }
+
 };
