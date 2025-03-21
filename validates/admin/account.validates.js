@@ -23,13 +23,13 @@ module.exports.create_post = async (req, res, next) => {
         return;
     }
 
-    if(!req.body.confirmPassword) {
+    if(!req.body.passwordConfirm) {
         req.flash("error", "Confirm password is required!");
         res.redirect("back");
         return;
     }
 
-    if(req.body.password !== req.body.confirmPassword) {
+    if(req.body.password !== req.body.passwordConfirm) {
         req.flash("error", "Password and confirm password do not match!");
         res.redirect("back");
         return;

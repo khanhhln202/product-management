@@ -1,0 +1,42 @@
+doctype html
+html
+    head
+        title No Permission
+        style.
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #f8f9fa;
+            }
+            .no-permission {
+                text-align: center;
+                background: #fff;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .no-permission h1 {
+                color: #dc3545;
+                margin-bottom: 1rem;
+            }
+            .no-permission p {
+                margin-bottom: 1.5rem;
+                color: #6c757d;
+            }
+            .no-permission a {
+                text-decoration: none;
+                color: #007bff;
+                font-weight: bold;
+            }
+            .no-permission a:hover {
+                text-decoration: underline;
+            }
+    body
+        .no-permission
+            h1 You don't have permission to access this page
+            p Please contact the administrator if you believe this is an error.
+            a(href=`${prefixAdmin}/auth/logout`) Logout

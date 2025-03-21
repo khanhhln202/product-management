@@ -3,107 +3,110 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main 
-    +alert-success(5000)
-    +alert-error(5000)
 
-    h1(class="mb-4") Edit The Product Category
+    if(role_auth.permissions.includes("products-category_edit"))
 
-    form(
-        action=`${prefixAdmin}/product-categories/edit/${productCategory.id}?_method=PATCH`
-        id="form-create-product-category"
-        method="POST"
-        enctype="multipart/form-data" 
-    )
+        +alert-success(5000)
+        +alert-error(5000)
 
-        div(class="form-group")
-            label(for="title") Title 
-            input(
-                type="text"
-                class="form-control"
-                id="title"
-                name="title"
-                required
-                value=productCategory.title
-            )
+        h1(class="mb-4") Edit The Product Category
 
-        div(class="form-group")
-            label(for="parent_id") Parent Category
-            select(
-                name="parent_id"
-                id="parent_id"
-                class="form-control"
-            )
-                option(value="") -- Root Category --
-                    if (productCategories)
-                        +select-tree(productCategories, 1, productCategory.parent_id)
-                        
-            
-        div(class="form-group")
-            label(for="desc") Description
-            textarea(
-                class="form-control texterea-mce"
-                id="desc"
-                name="description"
-                rows="5"
-                textarea-mce
-            ) #{productCategory.description}
-
-        div(
-            class="form-group"
-            upload-image
+        form(
+            action=`${prefixAdmin}/product-categories/edit/${productCategory.id}?_method=PATCH`
+            id="form-create-product-category"
+            method="POST"
+            enctype="multipart/form-data" 
         )
-            label(for="thumbnail") Thumbnail
-            input(
-                type="file"
-                class="form-control-file"
-                id="thumbnail"
-                name="thumbnail"
-                accept="image/*"
-                upload-image-input
-            )
-            img(
-                src=productCategory.thumbnail
-                class="image-preview mt-2"
-                upload-image-preview
-            )
 
-        div(class="form-group")
-            label(for="position") Position
-            input(
-                type="number"
-                class="form-control"
-                id="position"
-                name="position"
-                placeholder="Auto"
-                min="1"
-                value=productCategory.position
-            )
-        
-        div(class="form-group form-check form-check-inline")
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusActive"
-                name="status"
-                value="active"
-                checked=(productCategory.status == "active" ? true : false)
-            )
-            label(for="statusActive" class="form-check-label") Active
+            div(class="form-group")
+                label(for="title") Title 
+                input(
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    required
+                    value=productCategory.title
+                )
 
-        div(class="form-group form-check form-check-inline")
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusActive"
-                name="status"
-                value="inactive"
-                checked=(productCategory.status == "inactive" ? true : false)
-            )
-            label(for="statusActive" class="form-check-label") Inactive
+            div(class="form-group")
+                label(for="parent_id") Parent Category
+                select(
+                    name="parent_id"
+                    id="parent_id"
+                    class="form-control"
+                )
+                    option(value="") -- Root Category --
+                        if (productCategories)
+                            +select-tree(productCategories, 1, productCategory.parent_id)
+                            
+                
+            div(class="form-group")
+                label(for="desc") Description
+                textarea(
+                    class="form-control texterea-mce"
+                    id="desc"
+                    name="description"
+                    rows="5"
+                    textarea-mce
+                ) #{productCategory.description}
 
-        div(class="form-group")
-            button(
-                type="submit"
-                class="btn btn-primary"
-            ) Apply
+            div(
+                class="form-group"
+                upload-image
+            )
+                label(for="thumbnail") Thumbnail
+                input(
+                    type="file"
+                    class="form-control-file"
+                    id="thumbnail"
+                    name="thumbnail"
+                    accept="image/*"
+                    upload-image-input
+                )
+                img(
+                    src=productCategory.thumbnail
+                    class="image-preview mt-2"
+                    upload-image-preview
+                )
+
+            div(class="form-group")
+                label(for="position") Position
+                input(
+                    type="number"
+                    class="form-control"
+                    id="position"
+                    name="position"
+                    placeholder="Auto"
+                    min="1"
+                    value=productCategory.position
+                )
+            
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusActive"
+                    name="status"
+                    value="active"
+                    checked=(productCategory.status == "active" ? true : false)
+                )
+                label(for="statusActive" class="form-check-label") Active
+
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusActive"
+                    name="status"
+                    value="inactive"
+                    checked=(productCategory.status == "inactive" ? true : false)
+                )
+                label(for="statusActive" class="form-check-label") Inactive
+
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Apply
 

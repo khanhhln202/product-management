@@ -3,142 +3,145 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main
-    +alert-success(5000)
-    +alert-error(5000)
 
-    h1(class="mb-4") Create New Product
+    if(role_auth.permissions.includes("products_create"))
 
-    form(
-        action=`${prefixAdmin}/products/create`
-        id="form-create-product"
-        method="POST"
-        enctype="multipart/form-data" 
-    )
+        +alert-success(5000)
+        +alert-error(5000)
 
-        div(class="form-group")
-            label(for="title") Title
-            input(
-                type="text"
-                class="form-control"
-                id="title"
-                name="title"
-                required
-            )
+        h1(class="mb-4") Create New Product
 
-        div(class="form-group")
-            label(for="product_category_id") Category
-            select(
-                name="product_category_id"
-                id="product_category_id"
-                class="form-control"
-            )
-                option(value="") -- Category --
-                    if (categories)
-                        +select-tree(categories)
-
-        div(class="form-group")
-            label(for="desc") Description
-            textarea(
-                class="form-control texterea-mce"
-                id="desc"
-                name="description"
-                rows="5"
-            )
-
-        div(class="form-group")
-            label(for="price") Price
-            input(
-                type="number"
-                class="form-control"
-                id="price"
-                name="price"
-                required
-                value="0"
-                min="0"
-            )
-
-        div(class="form-group")
-            label(for="discount") $ Discount
-            input(
-                type="number"
-                class="form-control"
-                id="discount"
-                name="discountPercentage"
-                value="0"
-                min="0"
-            )
-
-        div(class="form-group")
-            label(for="stock") Stock
-            input(
-                type="number"
-                class="form-control"
-                id="stock"
-                name="stock"
-                value="0"
-                min="0"
-            )
-
-        div(
-            class="form-group"
-            upload-image
+        form(
+            action=`${prefixAdmin}/products/create`
+            id="form-create-product"
+            method="POST"
+            enctype="multipart/form-data" 
         )
-            label(for="thumbnail") Thumbnail
-            input(
-                type="file"
-                class="form-control-file"
-                id="thumbnail"
-                name="thumbnail"
-                accept="image/*"
-                upload-image-input
-            )
-            div(class="image-container")
-                img(
-                    src=""
-                    upload-image-preview
-                    class="image-preview"
+
+            div(class="form-group")
+                label(for="title") Title
+                input(
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    required
                 )
-                button(
-                    type="button"
-                    class="close-btn"
-                    upload-image-hide
-                ) ✕
+
+            div(class="form-group")
+                label(for="product_category_id") Category
+                select(
+                    name="product_category_id"
+                    id="product_category_id"
+                    class="form-control"
+                )
+                    option(value="") -- Category --
+                        if (categories)
+                            +select-tree(categories)
+
+            div(class="form-group")
+                label(for="desc") Description
+                textarea(
+                    class="form-control texterea-mce"
+                    id="desc"
+                    name="description"
+                    rows="5"
+                )
+
+            div(class="form-group")
+                label(for="price") Price
+                input(
+                    type="number"
+                    class="form-control"
+                    id="price"
+                    name="price"
+                    required
+                    value="0"
+                    min="0"
+                )
+
+            div(class="form-group")
+                label(for="discount") $ Discount
+                input(
+                    type="number"
+                    class="form-control"
+                    id="discount"
+                    name="discountPercentage"
+                    value="0"
+                    min="0"
+                )
+
+            div(class="form-group")
+                label(for="stock") Stock
+                input(
+                    type="number"
+                    class="form-control"
+                    id="stock"
+                    name="stock"
+                    value="0"
+                    min="0"
+                )
+
+            div(
+                class="form-group"
+                upload-image
+            )
+                label(for="thumbnail") Thumbnail
+                input(
+                    type="file"
+                    class="form-control-file"
+                    id="thumbnail"
+                    name="thumbnail"
+                    accept="image/*"
+                    upload-image-input
+                )
+                div(class="image-container")
+                    img(
+                        src=""
+                        upload-image-preview
+                        class="image-preview"
+                    )
+                    button(
+                        type="button"
+                        class="close-btn"
+                        upload-image-hide
+                    ) ✕
+                
+            div(class="form-group")
+                label(for="position") Position
+                input(
+                    type="number"
+                    class="form-control"
+                    id="position"
+                    name="position"
+                    placeholder="Auto increase"
+                    min="1"
+                )
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusActive"
+                    name="status"
+                    value="active"
+                    checked
+                )
+                label(for="statusActive" class="form-check-label") Active
             
-        div(class="form-group")
-            label(for="position") Position
-            input(
-                type="number"
-                class="form-control"
-                id="position"
-                name="position"
-                placeholder="Auto increase"
-                min="1"
-            )
-        div(class="form-group form-check form-check-inline")
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusActive"
-                name="status"
-                value="active"
-                checked
-            )
-            label(for="statusActive" class="form-check-label") Active
-        
-        div(class="form-group form-check form-check-inline")
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusInactive"
-                name="status"
-                value="inactive"
-            )
-            label(for="statusInactive" class="form-check-label") Inactive
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusInactive"
+                    name="status"
+                    value="inactive"
+                )
+                label(for="statusInactive" class="form-check-label") Inactive
 
-        div(class="form-group")
-            button(
-                type="submit"
-                class="btn btn-primary"
-            ) Create
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Create
 
-    script(src="/admin/js/product.js")
+        script(src="/admin/js/product.js")

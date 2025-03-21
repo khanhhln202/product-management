@@ -3,16 +3,26 @@
         ul 
             li 
                 a(href=`${prefixAdmin}/dashboard`) Overview 
-            li 
-                a(href=`${prefixAdmin}/product-categories`) Product catalog
-            li 
-                a(href=`${prefixAdmin}/products`) Products 
-            li 
-                a(href=`${prefixAdmin}/roles`) Roles
-            li 
-                a(href=`${prefixAdmin}/roles/permissions`) Permissions
-            li
-                a(href=`${prefixAdmin}/accounts`) List of accounts
+            
+            if(role_auth.permissions.includes('products-category_view'))
+                li 
+                    a(href=`${prefixAdmin}/product-categories`) Product catalog
+
+            if(role_auth.permissions.includes('products_view'))
+                li 
+                    a(href=`${prefixAdmin}/products`) Products 
+
+            if(role_auth.permissions.includes('roles_view'))
+                li 
+                    a(href=`${prefixAdmin}/roles`) Roles
+
+            if(role_auth.permissions.includes('permissions_manage'))
+                li 
+                    a(href=`${prefixAdmin}/roles/permissions`) Permissions
+
+            if(role_auth.permissions.includes('accounts_view'))
+                li
+                    a(href=`${prefixAdmin}/accounts`) List of accounts
         
             
             
