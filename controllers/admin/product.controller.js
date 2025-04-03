@@ -1,5 +1,6 @@
 const DummyProduct = require("../../models/dummy-products");
 const ProductCategory = require("../../models/product-categories.model");
+const Account = require("../../models/account.model");
 
 const systemConfig = require("../../config/system");
 
@@ -45,20 +46,42 @@ module.exports.index = async (req, res) => {
   );
   // End of pagination
 
-  // Sort 
+  // Sort
   let sort = {};
 
-  if(req.query.sortKey && req.query.sortValue){
+  if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue;
   } else {
     sort = { position: "desc" };
-  } 
+  }
   // End of sort
 
   const dummyProducts = await DummyProduct.find(find)
     .sort(sort)
-    .limit(objPagination.limitItems) 
+    .limit(objPagination.limitItems)
     .skip(objPagination.skip); // Skip the first n items and return the rest of the items from the collection
+
+
+  for (const item of dummyProducts) {
+    // Add createdBy
+    const user = await Account.findOne({ _id: item.createdBy.account_id });
+
+    if (user) {
+      item.authorName = user.fullName;
+    } else {
+      item.authorName = "Unknown";
+    }
+
+    // Add updatedBy
+    // const updateBy = item.updatedBy[item.updatedBy.length-1];
+    const lastUpdatedBy = item.updatedBy.slice(-1)[0];
+    if(lastUpdatedBy){
+      const updater = await Account.findOne({_id : lastUpdatedBy.account_id})
+      // item.updatedBy.slice(-1)[0].updaterFullName = updater.fullName;
+      lastUpdatedBy.updaterFullName = updater.fullName;
+    }
+    console.log(item);
+  }
 
   res.render("admin/pages/products/index", {
     pageTitle: "Products list",
@@ -74,7 +97,15 @@ module.exports.changeStatus = async (req, res) => {
   const id = req.params.id;
   const status = req.params.status;
 
-  await DummyProduct.updateOne({ _id: id }, { status: status });
+  const updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date(),
+  };
+  
+  await DummyProduct.updateOne({ _id: id }, { 
+    status: status,
+    $push: { updatedBy: updatedBy }
+  });
 
   req.flash("success", "Change status successfully!");
 
@@ -86,11 +117,16 @@ module.exports.changeMulti = async (req, res) => {
   const type = req.body.type;
   const ids = req.body.ids.split(",");
 
+  const updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date(),
+  };
+
   switch (type) {
     case "active":
       await DummyProduct.updateMany(
         { _id: { $in: ids } },
-        { status: "active" }
+        { status: "active", $push: { updatedBy: updatedBy } }
       );
       req.flash(
         "success",
@@ -100,7 +136,7 @@ module.exports.changeMulti = async (req, res) => {
     case "inactive":
       await DummyProduct.updateMany(
         { _id: { $in: ids } },
-        { status: "inactive" }
+        { status: "inactive", $push: { updatedBy: updatedBy } }
       );
       req.flash(
         "success",
@@ -110,7 +146,7 @@ module.exports.changeMulti = async (req, res) => {
     case "delete-all":
       await DummyProduct.updateMany(
         { _id: { $in: ids } },
-        { delete: true, deletedAt: new Date() }
+        { delete: true, deletedBy: { account_id: res.locals.user.id , deletedAt: new Date(),} }
       );
       req.flash("success", `Delete ${ids.length} items successfully!`);
       break;
@@ -118,7 +154,7 @@ module.exports.changeMulti = async (req, res) => {
       for (const item of ids) {
         let [id, position] = item.split("-");
         position = parseInt(position);
-        await DummyProduct.updateOne({ _id: id }, { position: position });
+        await DummyProduct.updateOne({ _id: id }, { position: position, $push: { updatedBy: updatedBy } });
       }
       req.flash(
         "success",
@@ -139,7 +175,7 @@ module.exports.deleteItem = async (req, res) => {
   // await DummyProduct.deleteOne({ _id: id }); // Hard delete
   await DummyProduct.updateOne(
     { _id: id },
-    { delete: true, deletedAt: new Date() }
+    { delete: true, deletedBy: { account_id: res.locals.user.id , deletedAt: new Date(),} }
   ); // Soft delete
 
   req.flash("success", "Delete item successfully!");
@@ -157,14 +193,13 @@ module.exports.create = async (req, res) => {
 
   const newProductCategories = createTreeHelper.tree(productCategories);
 
-
   res.render("admin/pages/products/create", {
     pageTitle: "Create new product",
     categories: newProductCategories,
   });
 };
 
-// [POST] /admin/products/create
+// [POST] /admin/products/create_post
 module.exports.create_post = async (req, res) => {
   // Convert properties to integers to ensure correct data types
   req.body.price = parseInt(req.body.price);
@@ -176,6 +211,11 @@ module.exports.create_post = async (req, res) => {
   } else {
     req.body.position = parseInt(req.body.position);
   }
+
+  // Set createdBy
+  req.body.createdBy = {
+    account_id: res.locals.user.id,
+  };
 
   // Set the path to the uploaded file
   // `thumbnail` is a custom property added to `req.body`
@@ -201,9 +241,9 @@ module.exports.edit = async (req, res) => {
     };
 
     const dummyProduct = await DummyProduct.findOne(findProduct);
-  
+
     const productCategories = await ProductCategory.find({ deleted: false });
-  
+
     const newProductCategories = createTreeHelper.tree(productCategories);
 
     res.render("admin/pages/products/edit", {
@@ -217,7 +257,7 @@ module.exports.edit = async (req, res) => {
   }
 };
 
-// [PATCH] /admin/products/edit/:id
+// [PATCH] /admin/products/edit_patch/:id
 // The data that was sent is in the request body, so we can access it using req.body
 module.exports.edit_patch = async (req, res) => {
   // Convert properties to integers to ensure correct data types
@@ -232,8 +272,15 @@ module.exports.edit_patch = async (req, res) => {
   // }
 
   try {
+    const updatedBy  = {
+      account_id: res.locals.user.id,
+      updatedAt: new Date(),
+    }
     // Update the product data
-    await DummyProduct.updateOne({ _id: req.params.id }, req.body); 
+    await DummyProduct.updateOne({ _id: req.params.id }, {
+      ...req.body, // Spread the properties from req.body to update the product data
+      $push: { updatedBy : updatedBy }
+    });
 
     req.flash("success", "Update product successfully!");
     res.redirect(`${systemConfig.prefixAdmin}/products/edit/${req.params.id}`);

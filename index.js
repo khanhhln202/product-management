@@ -18,6 +18,8 @@ const session = require('express-session'); // express-session is a middleware t
 // Express Flash (Express doesn't support flash messages by default. To solve this, we can use the express-flash package.)
 const flash = require("express-flash"); // flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user.
 
+const moment = require('moment');
+
 // Configure env (dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.)
 require("dotenv").config(); // dotenv is a module that loads environment variables from a .env file into process.env.
 
@@ -60,6 +62,7 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 
 // App Local Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
 
 // Serving Static Files (Express allows serving static assets (HTML, CSS, images) easily.)
 app.use(express.static(`${__dirname}/public`));
