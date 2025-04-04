@@ -9,12 +9,21 @@ module.exports.index = async (req, res) => {
     status: "active",
     delete: false,
     featured: "1",
-  }).sort({ position: "desc" }).limit(6); 
+  }).limit(6); 
 
-  const newProduct = productsHelper.priceNew(featuredProducts);
+  const newFeaturedProducts = productsHelper.priceNew(featuredProducts);
+
+  // Get latest products
+  const latestProducts = await DummyProduct.find({
+    status: "active",
+    delete: false,
+  }).sort({ position: "desc" }).limit(6);
+
+  const newLatestProducts = productsHelper.priceNew(latestProducts);
 
   res.render("client/pages/home/index", {
     pageTitle: "Home page",
-    featuredProducts: newProduct,
+    featuredProducts: newFeaturedProducts,
+    latestProducts: newLatestProducts,
   });
 };
