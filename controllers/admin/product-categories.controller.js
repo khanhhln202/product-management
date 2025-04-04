@@ -38,18 +38,25 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/product-categories/create_post
 module.exports.create_post = async (req, res) => {
-  if (req.body.position == "") {
-    const count = await ProductCategory.countDocuments();
-    req.body.position = count + 1;
+  const permissions = res.locals.role_auth.permissions;
+
+  if (permissions.includes("products-category_create")) {
+    if (req.body.position == "") {
+      const count = await ProductCategory.countDocuments();
+      req.body.position = count + 1;
+    } else {
+      req.body.position = parseInt(req.body.position);
+    }
+
+    const productCategory = new ProductCategory(req.body);
+    await productCategory.save();
+
+    req.flash("success", "Create new product category successfully!");
+    res.redirect(`${systemConfig.prefixAdmin}/product-categories/create`);
   } else {
-    req.body.position = parseInt(req.body.position);
+    res.send("403 Forbidden! You don't have permission to access this page.");
+    return;
   }
-
-  const productCategory = new ProductCategory(req.body);
-  await productCategory.save();
-
-  req.flash("success", "Create new product category successfully!");
-  res.redirect(`${systemConfig.prefixAdmin}/product-categories/create`);
 };
 
 // [GET] /admin/product-categories/edit/:id
@@ -83,15 +90,17 @@ module.exports.edit_patch = async (req, res) => {
     const id = req.params.id;
     req.body.position = parseInt(req.body.position);
 
-    await ProductCategory.updateOne({
-      _id: id,
-    }, req.body);
+    await ProductCategory.updateOne(
+      {
+        _id: id,
+      },
+      req.body
+    );
 
     req.flash("success", "Update product category successfully!");
-    res.redirect("back"); 
-
+    res.redirect("back");
   } catch (error) {
     req.flash("error", "Product category not found!");
     res.redirect(`${systemConfig.prefixAdmin}/product-categories`);
   }
-}
+};

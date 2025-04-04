@@ -40,6 +40,28 @@ block main
                         if (categories)
                             +select-tree(categories, 1, dummyProduct.product_category_id)
 
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="featured1"
+                    name="featured"
+                    value="1"
+                    checked=(dummyProduct.featured == "1" ? true : false)
+                )
+                label(for="featured1" class="form-check-label") Featured
+
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="featured0"
+                    name="featured"
+                    value="0"
+                    checked=(dummyProduct.featured == "0" ? true : false)
+                )
+                label(for="featured0" class="form-check-label") Not Featured
+
             div(class="form-group")
                 label(for="desc") Description
                 textarea(
