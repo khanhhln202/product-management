@@ -25,10 +25,24 @@ module.exports.detail = async (req, res) => {
     const findProduct = {
       delete: false,
       status: "active",
-      slug: req.params.slug, // req.params.slug get from router.get('/:slug', controller.detail);
+      slug: req.params.productSlug, // req.params.slug get from router.get('/:slug', controller.detail);
     };
 
     const dummyProduct = await DummyProduct.findOne(findProduct);
+
+    // Get category of product
+    if (dummyProduct.product_category_id) {
+      const category = await ProductCategory.findOne({
+        id: dummyProduct.product_category_id,
+        status: "active",
+        deleted: false,
+      });
+
+      dummyProduct.category = category;
+    }
+    // End get category of product
+
+    dummyProduct.newPrice = productsHelper.priceNewOfAProduct(dummyProduct); // Add newPrice to product
 
     res.render("client/pages/products/detail", {
       pageTitle: dummyProduct.title,

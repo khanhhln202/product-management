@@ -1,31 +1,54 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
 
 block main 
-    .container.my-3 
-        .row 
-            .col-12 
-                if (dummyProduct.title)
-                    h1(class="mb-4") #{dummyProduct.title}
+    .product-detail
+        .container.my-5
+            .row 
+                .col-6
+                    .inner-thumb
+                        img(src=dummyProduct.thumbnail, alt=dummyProduct.title)
+                .col-6 
+                    h1(class="inner-title") #{dummyProduct.title}
 
-                if (dummyProduct.price)
-                    div(class="mb-4") Price: <b>#{dummyProduct.price}$</b>
+                    if (dummyProduct.category)
+                        div(class="inner-category") 
+                            span Category:
+                                a(href=`/products/${dummyProduct.category.slug}`) #{dummyProduct.category.title}
 
-                if (dummyProduct.discountPercentage)
-                    div(class="mb-4") Discount: <b>#{dummyProduct.discountPercentage}%</b>
+                    if (dummyProduct.newPrice)
+                        div(class="inner-new-price") #{dummyProduct.newPrice}$
 
-                if (dummyProduct.stock)
-                    div(class="mb-4") Stock: <b>#{dummyProduct.stock}</b>
+                    if (dummyProduct.price)
+                        div(class="inner-old-price") #{dummyProduct.price}$
 
-                if (dummyProduct.thumbnail)
-                    div(class="mb-4") 
-                        img(
-                            src=dummyProduct.thumbnail
-                            alt=dummyProduct.title
-                            style="width: 100px;"
+                    if (dummyProduct.discountPercentage)
+                        div(class="inner-percent") Discount: <span>#{dummyProduct.discountPercentage}%</span>
+
+                    if (dummyProduct.stock)
+                        div(class="inner-stock") Stock: <span>#{dummyProduct.stock}</span> products
+
+                    form(
+                        action=`/cart/add/${dummyProduct.id}`
+                        method="POST"
+                    ) 
+                        input(
+                            class="form-control mb-2"
+                            type="number"
+                            name="quantity"
+                            value="1"
+                            min="1"
+                            max=dummyProduct.stock
                         )
+                        button(
+                            class="btn btn-success btn-block"
+                            type="submit"
+                        ) Add to Cart
 
-                if (dummyProduct.position)
-                    div(class="mb-4") Position: <b>#{dummyProduct.position}</b>
+        hr
 
-                if (dummyProduct.description)
-                    div(class="mb-4") !{dummyProduct.description}
+        .container.my-5 
+            .row 
+                .col-12 
+                    +box-head("Description")
+                    .inner-desc !{dummyProduct.description}

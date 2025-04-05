@@ -38,7 +38,7 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/product-categories/create_post
 module.exports.create_post = async (req, res) => {
-  const permissions = res.locals.role_auth.permissions;
+  const permissions = res.locals.role_auth.permissions; // permissions is an array of permissions
 
   if (permissions.includes("products-category_create")) {
     if (req.body.position == "") {
